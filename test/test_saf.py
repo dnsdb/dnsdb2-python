@@ -18,6 +18,8 @@ import textwrap
 from typing import Iterable, Collection, Type
 import unittest
 
+import requests_mock
+
 import dnsdb2
 import dnsdb2.saf
 
@@ -100,17 +102,27 @@ class TestSafHandler(unittest.TestCase):
 
     def run_test(self, msgs: Iterable[str], expected: Collection[str], e: Type[BaseException] = None,
                  ignore_limited: bool = False):
+        class Response:
+            def __init__(self):
+                self.closed = False
+            def iter_lines(_, decode_unicode: bool):
+                self.assertTrue(decode_unicode)
+                return msgs
+            def close(self):
+                self.closed = True
+
+        res = Response()
         if not e:
-            actual = list(dnsdb2.saf.handle_saf(msgs, ignore_limited=ignore_limited))
+            actual = list(dnsdb2.saf.handle_saf(res, ignore_limited=ignore_limited))
         else:
             actual = []
 
             def f():
-                for msg in dnsdb2.saf.handle_saf(msgs, ignore_limited=ignore_limited):
+                for msg in dnsdb2.saf.handle_saf(res, ignore_limited=ignore_limited):
                     actual.append(msg)
             self.assertRaises(e, f)
         self.assertEqual([json.loads(s) for s in filter(lambda x: x, expected)], actual)
-
+        self.assertTrue(res.closed, "Connection was closed")
 
 if __name__ == '__main__':
     unittest.main()

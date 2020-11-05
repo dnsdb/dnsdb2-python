@@ -14,7 +14,8 @@
 
 
 import json
-from typing import Iterable
+
+import requests
 
 import dnsdb2
 
@@ -26,37 +27,40 @@ COND_LIMITED = 'limited'
 COND_FAILED = 'failed'
 
 
-def handle_saf(i: Iterable[str], ignore_limited: bool = False):
-    for line in i:
-        if not line:
-            continue
+def handle_saf(res: requests.Response, ignore_limited: bool = False):
+    try:
+        for line in res.iter_lines(decode_unicode=True):
+            if not line:
+                continue
 
-        try:
-            saf_msg = json.loads(line)
-        except json.JSONDecodeError as e:
-            raise dnsdb2.ProtocolError(f'could not decode json: {line}') from e
+            try:
+                saf_msg = json.loads(line)
+            except json.JSONDecodeError as e:
+                raise dnsdb2.ProtocolError(f'could not decode json: {line}') from e
 
-        cond = saf_msg.get('cond')
-        obj = saf_msg.get('obj')
-        msg = saf_msg.get('msg')
+            cond = saf_msg.get('cond')
+            obj = saf_msg.get('obj')
+            msg = saf_msg.get('msg')
 
-        if cond == COND_BEGIN:
-            continue
-        elif cond == COND_SUCCEEDED:
-            return
-
-        if obj:
-            yield obj
-
-        if cond == COND_ONGOING or not cond:
-            continue
-        elif cond == COND_LIMITED:
-            if ignore_limited:
+            if cond == COND_BEGIN:
+                continue
+            elif cond == COND_SUCCEEDED:
                 return
-            raise dnsdb2.QueryLimited(msg)
-        elif cond == COND_FAILED:
-            raise dnsdb2.QueryFailed(msg)
-        else:
-            raise dnsdb2.ProtocolError(f'invalid cond: {cond}')
 
-    raise dnsdb2.QueryTruncated()
+            if obj:
+                yield obj
+
+            if cond == COND_ONGOING or not cond:
+                continue
+            elif cond == COND_LIMITED:
+                if ignore_limited:
+                    return
+                raise dnsdb2.QueryLimited(msg)
+            elif cond == COND_FAILED:
+                raise dnsdb2.QueryFailed(msg)
+            else:
+                raise dnsdb2.ProtocolError(f'invalid cond: {cond}')
+
+        raise dnsdb2.QueryTruncated()
+    finally:
+        res.close()

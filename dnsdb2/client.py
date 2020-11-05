@@ -325,6 +325,13 @@ class Client(object):
         self.version = version
         self.proxies = proxies
         self.insecure = insecure
+        self._session = requests.Session()
+
+    def close(self) -> None:
+        """
+        Releases resources allocated by the Client.
+        """
+        self._session.close()
 
     lookup_rrset = _gen_rrset('lookup')
     summarize_rrset = _gen_rrset('summarize')
@@ -373,14 +380,14 @@ class Client(object):
         query_params.update(params)
 
         try:
-            res = requests.get(url,
-                               params=query_params,
-                               headers=self._headers(),
-                               proxies=self.proxies,
-                               verify=not self.insecure,
-                               )
-            _raise_error(res)
-            return res.json()
+            with self._session.get(url,
+                                   params=query_params,
+                                   headers=self._headers(),
+                                   proxies=self.proxies,
+                                   verify=not self.insecure,
+                                   ) as res:
+                _raise_error(res)
+                return res.json()
         except requests.RequestException as e:
             raise dnsdb2.QueryError from e
 
@@ -391,7 +398,7 @@ class Client(object):
         query_params.update(params)
 
         try:
-            res = requests.get(
+            res = self._session.get(
                 url,
                 headers=self._headers(),
                 params=query_params,
@@ -404,7 +411,7 @@ class Client(object):
         except requests.RequestException as e:
             raise dnsdb2.QueryError from e
 
-        return dnsdb2.saf.handle_saf(res.iter_lines(decode_unicode=True), ignore_limited=ignore_limited)
+        return dnsdb2.saf.handle_saf(res, ignore_limited=ignore_limited)
 
 
 def _quote(path):

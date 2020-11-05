@@ -74,9 +74,15 @@ class TestIntegration(unittest.TestCase):
             self.skipTest('apikey undefined')
         self.client = dnsdb2.Client(apikey=self.apikey, server=self.server)
 
+    def tearDown(self) -> None:
+        self.client.close()
+
     def test_bad_key(self):
         c = dnsdb2.Client('invalid-key', server=self.server)
-        self.assertRaises(dnsdb2.AccessDenied, c.rate_limit)
+        try:
+            self.assertRaises(dnsdb2.AccessDenied, c.rate_limit)
+        finally:
+            c.close()
 
     test_ping = _gen_integration_test([
         {
@@ -87,11 +93,17 @@ class TestIntegration(unittest.TestCase):
 
     def test_ping_empty_key(self):
         c = dnsdb2.Client('', server=self.server)
-        self.assertTrue(c.ping())
+        try:
+            self.assertTrue(c.ping())
+        finally:
+            c.close()
 
     def test_ping_bad_key(self):
         c = dnsdb2.Client('invalid-key', server=self.server)
-        self.assertTrue(c.ping())
+        try:
+            self.assertTrue(c.ping())
+        finally:
+            c.close()
 
     test_rate_limit = _gen_integration_test([
         {
