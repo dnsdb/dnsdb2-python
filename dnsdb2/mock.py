@@ -69,7 +69,8 @@ def _records(f):
 def _searches(f):
     def g(*args, **_):
         self = args[0]
-        res = self.search_results.pop()
+        res = self.search_results[0]
+        self.search_results = self.search_results[1:]
         if isinstance(res, Exception):
             raise res
         return res
