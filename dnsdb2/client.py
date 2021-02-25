@@ -35,7 +35,7 @@ import dnsdb2.saf
 ACCEPT_CONTENT_TYPE = 'application/x-ndjson'
 DEFAULT_DNSDB_SERVER = 'https://api.dnsdb.info'
 API_PREFIX = 'dnsdb/v2'
-DEFAULT_SWCLIENT = 'dnsdb2-python'
+DEFAULT_SWCLIENT = 'dnsdb2python'
 DEFAULT_VERSION = dnsdb2.__version__
 
 METHOD_LOOKUP = 'lookup'
