@@ -6,3 +6,9 @@
 /dist
 /.eggs
 __pycache__
+.pybuild
+debian/.debhelper
+debian/debhelper-build-stamp
+debian/files
+debian/python3-dnsdb2*
+*.deb
