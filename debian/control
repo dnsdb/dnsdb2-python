@@ -1,0 +1,23 @@
+Source: dnsdb2-python
+Section: python
+Priority: optional
+Maintainer: Farsight Security, Inc. <software@farsightsecurity.com>
+Build-Depends:
+ debhelper (>= 11~),
+ dh-python,
+ python3-all (>= 3.6),
+ python3-importlib-metadata,
+ python3-requests-mock,
+ python3-setuptools,
+ python3-setuptools-scm,
+Standards-Version: 3.9.8
+
+Package: python3-dnsdb2
+Architecture: any
+Depends: ${misc:Depends}, ${python3:Depends},
+ python3-requests,
+Description: Farsight DNSDB SDK for Python
+ This software development kit for Python 3 implements all features of
+ the DNSDB Version 2 with Flexible Search API.  For more information
+ please see https://docs.dnsdb.info/dnsdb-apiv2/ and
+ https://docs.dnsdb.info/dnsdb-flex/ .

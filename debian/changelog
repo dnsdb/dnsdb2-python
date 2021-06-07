@@ -1,0 +1,5 @@
+dnsdb2-python (1.1.2-1) debian-fsi; urgency=medium
+
+  * Initial release.
+
+ -- Farsight Security, Inc. <software@farsightsecurity.com>  Mon, 10 May 2021 22:43:54 +0000
