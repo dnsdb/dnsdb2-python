@@ -15,7 +15,7 @@
 # A client for DNSDB protocol version 2 with Flex Search.
 #
 # Example:
-#     c = dnsdb2.Client(apikey)
+#     c = dnsdb2.Client(apikey, swclient="yourappname", version="v0.0")
 #     try:
 #        for result in c.flex_rrnames_regex(r'\._dkim\.', limit=1):
 #            # do something with result
@@ -300,7 +300,7 @@ class Client(object):
     A client for DNSDB protocol version 2 with Flex Search.
 
     Example:
-        c = dnsdb2.Client(apikey)
+        c = dnsdb2.Client(apikey, swclient="yourappname", version="v0.0")
         try:
             for result in c.flex_rrnames_regex(r'\\._dkim\\.', limit=1):
                 # do something with result
