@@ -21,7 +21,7 @@ Import the dnsdb2 library and configure a client.
 
 ```python
 import dnsdb2
-client = dnsdb2.Client(apikey)
+client = dnsdb2.Client(apikey, swclient="yourappname", version="v0.0")
 ```
 
 Perform a flex regex search for `farsight`. This manually suppresses `QueryLimited` exceptions raised by the server if the query results exceed the row limited.
