@@ -7,7 +7,7 @@ This software development kit for Python 3 implements all features of the [DNSDB
 ## Requirements
 
 - Python 3.6 or greater.
-- [Python requests](http://python-requests.org).
+- [Python requests](https://github.com/psf/requests).
 - [Requests mock](https://pypi.org/project/requests-mock/) for running the test suite.
 - A [DNSDB API key](https://www.farsightsecurity.com/solutions/dnsdb/).
 
@@ -60,9 +60,9 @@ while True:
 
 ## API Documentation
 
-https://docs.dnsdb.info/dnsdb-apiv2/
+https://docs.farsightsecurity.com/dnsdb/dnsdb-apiv2/
 
-https://docs.dnsdb.info/dnsdb-flex/
+https://docs.farsightsecurity.com/dnsdb/dnsdb-flex-api/
 
 ### Table of Contents
 
