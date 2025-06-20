@@ -309,7 +309,7 @@ class Client(object):
     """
     def __init__(self, apikey: str, server: str = DEFAULT_DNSDB_SERVER,
                  swclient: str = DEFAULT_SWCLIENT, version: str = DEFAULT_VERSION,
-                 proxies: Dict[str, str] = None, insecure: bool = False):
+                 proxies: Dict[str, str] = None, insecure: bool = False, cert: str = None):
         """
         Args:
             apikey (str): A DNSDB API key
@@ -318,6 +318,7 @@ class Client(object):
             version (str): The version of the software reported to DNSDB.
             proxies (Dict[str, str]): HTTP proxies to use. Mapping of protocol to URL.
             insecure (bool): Skip https validation.
+            cert (str): path to ssl client cert file.
         """
         self.apikey = apikey
         self.server = server
@@ -325,6 +326,7 @@ class Client(object):
         self.version = version
         self.proxies = proxies
         self.insecure = insecure
+        self.cert = cert
         self._session = requests.Session()
 
     def close(self) -> None:
@@ -385,6 +387,7 @@ class Client(object):
                                    headers=self._headers(),
                                    proxies=self.proxies,
                                    verify=not self.insecure,
+                                   cert=self.cert,
                                    ) as res:
                 _raise_error(res)
                 return res.json()
@@ -405,6 +408,7 @@ class Client(object):
                 proxies=self.proxies,
                 verify=not self.insecure,
                 stream=True,
+                cert=self.cert,
             )
 
             _raise_error(res)
