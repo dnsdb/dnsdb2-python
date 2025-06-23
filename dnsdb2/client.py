@@ -309,7 +309,7 @@ class Client(object):
     """
     def __init__(self, apikey: str, server: str = DEFAULT_DNSDB_SERVER,
                  swclient: str = DEFAULT_SWCLIENT, version: str = DEFAULT_VERSION,
-                 proxies: Dict[str, str] = None, insecure: bool = False, cert: str = None):
+                 proxies: Dict[str, str] = None, verify: str = None):
         """
         Args:
             apikey (str): A DNSDB API key
@@ -317,16 +317,14 @@ class Client(object):
             swclient (str): The name of the client software reported to DNSDB.
             version (str): The version of the software reported to DNSDB.
             proxies (Dict[str, str]): HTTP proxies to use. Mapping of protocol to URL.
-            insecure (bool): Skip https validation.
-            cert (str): path to ssl client cert file.
+            verify (str): path to ssl client verify file.
         """
         self.apikey = apikey
         self.server = server
         self.swclient = swclient
         self.version = version
         self.proxies = proxies
-        self.insecure = insecure
-        self.cert = cert
+        self.verify = verify
         self._session = requests.Session()
 
     def close(self) -> None:
@@ -386,8 +384,7 @@ class Client(object):
                                    params=query_params,
                                    headers=self._headers(),
                                    proxies=self.proxies,
-                                   verify=not self.insecure,
-                                   cert=self.cert,
+                                   verify=self.verify,
                                    ) as res:
                 _raise_error(res)
                 return res.json()
@@ -406,9 +403,8 @@ class Client(object):
                 headers=self._headers(),
                 params=query_params,
                 proxies=self.proxies,
-                verify=not self.insecure,
+                verify=self.verify,
                 stream=True,
-                cert=self.cert,
             )
 
             _raise_error(res)
