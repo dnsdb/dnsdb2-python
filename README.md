@@ -1,6 +1,6 @@
 # Farsight DNSDB Version 2 with Flexible Search SDK for Python
 
-[Farsight Security DNSDB®](https://www.farsightsecurity.com/solutions/dnsdb/) is the world’s largest DNS intelligence database that provides a unique, fact-based, multifaceted view of the configuration of the global Internet infrastructure. DNSDB leverages the richness of Farsight’s Security Information Exchange (SIE) data-sharing platform and is engineered and operated by leading DNS experts. Farsight collects Passive DNS data from its global sensor array. It then filters and verifies the DNS transactions before inserting them into the DNSDB, along with ICANN-sponsored zone file access download data. The end result is the highest-quality and most comprehensive DNS intelligence data service of its kind - with more than 100 billion DNS records since 2010.
+[DomainTools' Farsight DNSDB®](https://www.domaintools.com/products/farsight-dnsdb/) is the world’s largest DNS intelligence database that provides a unique, fact-based, multifaceted view of the configuration of the global Internet infrastructure. DNSDB leverages the richness of Farsight’s Security Information Exchange (SIE) data-sharing platform and is engineered and operated by leading DNS experts. Farsight collects Passive DNS data from its global sensor array. It then filters and verifies the DNS transactions before inserting them into the DNSDB, along with ICANN-sponsored zone file access download data. The end result is the highest-quality and most comprehensive DNS intelligence data service of its kind - with more than 100 billion DNS records since 2010.
 
 This software development kit for Python 3 implements all features of the [DNSDB Version 2](https://docs.dnsdb.info/dnsdb-apiv2/) with Flexible Search API. 
 
@@ -9,11 +9,9 @@ This software development kit for Python 3 implements all features of the [DNSDB
 - Python 3.6 or greater.
 - [Python requests](https://github.com/psf/requests).
 - [Requests mock](https://pypi.org/project/requests-mock/) for running the test suite.
-- A [DNSDB API key](https://www.farsightsecurity.com/solutions/dnsdb/).
+- A DNSDB API key.
 
-To purchase DNSDB, please complete the [application form](https://www.farsightsecurity.com/order-form/). Our due diligence process requires that you provide answers for all required fields in the application. We must be able to positively establish your identity and projected use case, so your cooperation in completing this information will be greatly appreciated and expedite the approval process. Once your application is completed, Farsight Security will review and respond to your request within two business days.
-
-DNSDB Free 30-day Trial Key: Farsight’s [API Key portability program](https://www.farsightsecurity.com/trial-api/) lets you unlock the power of DNS intelligence across dozens of SIEM, Orchestration, Automation and Threat Intelligence Platforms that already support Farsight's DNSDB RESTful API. 
+To purchase DNSDB, please complete the [application form](https://www.domaintools.com/demo/). Our due diligence process requires that you provide answers for all required fields in the application. We must be able to positively establish your identity and projected use case, so your cooperation in completing this information will be greatly appreciated and expedite the approval process. Once your application is completed, Farsight Security will review and respond to your request within two business days.
 
 ## Examples
 
@@ -21,6 +19,7 @@ Import the dnsdb2 library and configure a client.
 
 ```python
 import dnsdb2
+apikey = "INSERT YOUR DNSDB API KEY HERE"
 client = dnsdb2.Client(apikey, swclient="yourappname", version="v0.0")
 ```
 
@@ -30,7 +29,7 @@ Perform a flex regex search for `farsight`. This manually suppresses `QueryLimit
 results = list(client.flex_rdata_regex('farsight', ignore_limited=True))
 ```
 
-Lookup rrsets for `*.dnsdb.info` with rrtype `A`. 
+Use the classic DNSDB API to lookup rrsets for `*.dnsdb.info` with rrtype `A`.
 
 ```python
 results = list(client.lookup_rrset("*.dnsdb.info", rrtype='A', ignore_limited=True))
@@ -60,9 +59,9 @@ while True:
 
 ## API Documentation
 
-https://docs.farsightsecurity.com/dnsdb/dnsdb-apiv2/
+https://docs.domaintools.com/api/dnsdb/
 
-https://docs.farsightsecurity.com/dnsdb/dnsdb-flex-api/
+https://www.domaintools.com/resources/user-guides/farsight-flexible-search-technical-reference-guide/
 
 ### Table of Contents
 
