@@ -25,7 +25,7 @@
 
 import http
 import urllib.parse
-from typing import Dict
+from typing import Dict, Union
 
 import requests
 
@@ -309,7 +309,7 @@ class Client(object):
     """
     def __init__(self, apikey: str, server: str = DEFAULT_DNSDB_SERVER,
                  swclient: str = DEFAULT_SWCLIENT, version: str = DEFAULT_VERSION,
-                 proxies: Dict[str, str] = None, insecure: bool = False):
+                 proxies: Dict[str, str] = None, insecure: bool = False, verify: Union[str, bool, None] = None):
         """
         Args:
             apikey (str): A DNSDB API key
@@ -318,6 +318,7 @@ class Client(object):
             version (str): The version of the software reported to DNSDB.
             proxies (Dict[str, str]): HTTP proxies to use. Mapping of protocol to URL.
             insecure (bool): Skip https validation.
+            verify (str): Either a boolean, in which case it controls whether we verify the server’s TLS certificate, or a string, in which case it must be a path to a CA bundle to use.
         """
         self.apikey = apikey
         self.server = server
@@ -325,6 +326,7 @@ class Client(object):
         self.version = version
         self.proxies = proxies
         self.insecure = insecure
+        self.verify = verify
         self._session = requests.Session()
 
     def close(self) -> None:
@@ -384,7 +386,7 @@ class Client(object):
                                    params=query_params,
                                    headers=self._headers(),
                                    proxies=self.proxies,
-                                   verify=not self.insecure,
+                                   verify=False if self.insecure else self.verify,
                                    ) as res:
                 _raise_error(res)
                 return res.json()
@@ -403,7 +405,7 @@ class Client(object):
                 headers=self._headers(),
                 params=query_params,
                 proxies=self.proxies,
-                verify=not self.insecure,
+                verify=False if self.insecure else self.verify,
                 stream=True,
             )
 
