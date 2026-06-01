@@ -15,6 +15,7 @@
 import json
 from typing import List
 import unittest
+from unittest.mock import MagicMock, patch
 
 import requests_mock
 
@@ -287,6 +288,41 @@ class TestDnsdbClient(unittest.TestCase):
         )
 
         self.assertRaises(dnsdb2.QueryError, self.client._saf_query, path)
+
+    def test_timeout_default(self, _):
+        self.assertIsNone(self.client.timeout)
+
+    def test_timeout_float(self, _):
+        client = dnsdb2.Client(server=self.server, apikey=self.apikey, timeout=5)
+        self.assertEqual(5, client.timeout)
+
+    def test_timeout_tuple(self, _):
+        client = dnsdb2.Client(server=self.server, apikey=self.apikey, timeout=(3, 30))
+        self.assertEqual((3, 30), client.timeout)
+
+    def test_timeout_passed_to_json_query(self, _):
+        client = dnsdb2.Client(server=self.server, apikey=self.apikey, timeout=5)
+        mock_response = MagicMock()
+        mock_response.status_code = 200
+        mock_response.json.return_value = {'ping': 'ok'}
+        mock_response.__enter__ = lambda s: s
+        mock_response.__exit__ = MagicMock(return_value=False)
+
+        with patch.object(client._session, 'get', return_value=mock_response) as mock_get:
+            client.ping()
+            _, kwargs = mock_get.call_args
+            self.assertEqual(5, kwargs.get('timeout'))
+
+    def test_timeout_passed_to_saf_query(self, _):
+        client = dnsdb2.Client(server=self.server, apikey=self.apikey, timeout=5)
+        mock_response = MagicMock()
+        mock_response.status_code = 200
+
+        with patch.object(client._session, 'get', return_value=mock_response) as mock_get, \
+             patch('dnsdb2.saf.handle_saf', return_value=iter([])):
+            list(client._saf_query('test/path'))
+            _, kwargs = mock_get.call_args
+            self.assertEqual(5, kwargs.get('timeout'))
 
 
 class TestQuote(unittest.TestCase):

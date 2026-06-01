@@ -309,7 +309,8 @@ class Client(object):
     """
     def __init__(self, apikey: str, server: str = DEFAULT_DNSDB_SERVER,
                  swclient: str = DEFAULT_SWCLIENT, version: str = DEFAULT_VERSION,
-                 proxies: Dict[str, str] = None, insecure: bool = False, verify: Union[str, bool, None] = None):
+                 proxies: Dict[str, str] = None, insecure: bool = False, verify: Union[str, bool, None] = None,
+                 timeout: Union[float, tuple, None] = None):
         """
         Args:
             apikey (str): A DNSDB API key
@@ -319,6 +320,7 @@ class Client(object):
             proxies (Dict[str, str]): HTTP proxies to use. Mapping of protocol to URL.
             insecure (bool): Skip https validation.
             verify (str): Either a boolean, in which case it controls whether we verify the server’s TLS certificate, or a string, in which case it must be a path to a CA bundle to use.
+            timeout (float or tuple): Seconds to wait for the server before raising an error. Use a (connect_timeout, read_timeout) tuple to set them independently. None means no timeout.
         """
         self.apikey = apikey
         self.server = server
@@ -327,6 +329,7 @@ class Client(object):
         self.proxies = proxies
         self.insecure = insecure
         self.verify = verify
+        self.timeout = timeout
         self._session = requests.Session()
 
     def close(self) -> None:
@@ -387,6 +390,7 @@ class Client(object):
                                    headers=self._headers(),
                                    proxies=self.proxies,
                                    verify=False if self.insecure else self.verify,
+                                   timeout=self.timeout,
                                    ) as res:
                 _raise_error(res)
                 return res.json()
@@ -407,6 +411,7 @@ class Client(object):
                 proxies=self.proxies,
                 verify=False if self.insecure else self.verify,
                 stream=True,
+                timeout=self.timeout,
             )
 
             _raise_error(res)
