@@ -63,21 +63,21 @@ _DOC_TIME_FENCE_ARGS = '''\
         when the DNS record was first observed. For example, the URL parameter
         “time_first_before=1420070400” will only provide matching DNS records
         that were first observed before (or older than) January 1, 2015.
-        
+
     time_first_after (int): provide results after the defined timestamp for when
         the DNS record was first observed. For example, the URL parameter
         “time_first_after=-31536000” will only provide results that were first
         observed within the last year.
-        
+
     time_last_before (int): provide results before the defined timestamp for
         when the DNS record was last observed. For example, the URL parameter
         “time_last_before=1356998400” will only provide results for DNS records
         that were last observed before 2013.
-        
+
     time_last_after (int): provide results after the defined timestamp for when
         the DNS record was last observed. For example, the URL parameter
         “time_last_after=-2678400” will only provide results that were last
-        observed after 31 days ago.    
+        observed after 31 days ago.
 '''
 
 _DOC_COMMON_ARGS = '''\
@@ -307,9 +307,17 @@ class Client(object):
         except dnsdb2.QueryLimited:
             # log that the query was limited, or re-issue with the next offset
     """
-    def __init__(self, apikey: str, server: str = DEFAULT_DNSDB_SERVER,
-                 swclient: str = DEFAULT_SWCLIENT, version: str = DEFAULT_VERSION,
-                 proxies: Dict[str, str] = None, insecure: bool = False, verify: Union[str, bool, None] = None):
+    def __init__(
+        self,
+        apikey: str,
+        server: str = DEFAULT_DNSDB_SERVER,
+        swclient: str = DEFAULT_SWCLIENT,
+        version: str = DEFAULT_VERSION,
+        proxies: Dict[str, str] = None,
+        insecure: bool = False,
+        verify: Union[str, bool, None] = None,
+        timeout: Union[float, tuple[float, float], None] = None
+    ):
         """
         Args:
             apikey (str): A DNSDB API key
@@ -319,6 +327,7 @@ class Client(object):
             proxies (Dict[str, str]): HTTP proxies to use. Mapping of protocol to URL.
             insecure (bool): Skip https validation.
             verify (str): Either a boolean, in which case it controls whether we verify the server’s TLS certificate, or a string, in which case it must be a path to a CA bundle to use.
+            timeout (float or tuple): Seconds to wait for server connect/initial read before raising an error. Use a (connect_timeout, read_timeout) tuple to set them independently. None means no timeout.
         """
         self.apikey = apikey
         self.server = server
@@ -327,6 +336,7 @@ class Client(object):
         self.proxies = proxies
         self.insecure = insecure
         self.verify = verify
+        self.timeout = timeout
         self._session = requests.Session()
 
     def close(self) -> None:
@@ -387,6 +397,7 @@ class Client(object):
                                    headers=self._headers(),
                                    proxies=self.proxies,
                                    verify=False if self.insecure else self.verify,
+                                   timeout=self.timeout,
                                    ) as res:
                 _raise_error(res)
                 return res.json()
@@ -407,6 +418,7 @@ class Client(object):
                 proxies=self.proxies,
                 verify=False if self.insecure else self.verify,
                 stream=True,
+                timeout=self.timeout,
             )
 
             _raise_error(res)
