@@ -1,3 +1,4 @@
+# Copyright (c) 2025-2026 DomainTools LLC
 # Copyright (c) 2020 by Farsight Security, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");

@@ -1,3 +1,9 @@
+dnsdb2-python (1.2.0-1) debian-fsi; urgency=medium
+
+  * Add a timeout parameter, raise a dnsdb.QueryError if exceeded.
+
+ -- DomainTools LLC <software@domaintools.com>  Mon, 22 Jun 2026 15:06:00 -0500
+
 dnsdb2-python (1.1.5-1) debian-fsi; urgency=medium
 
   * Provide "verify" parameter like the requests library. Either a boolean, in which case it controls whether we verify the server’s TLS certificate, or a string, in which case it must be a path to a CA bundle to use. (Keep "insecure" parameter for backwards compatibility.)
