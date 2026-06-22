@@ -97,7 +97,9 @@ https://www.domaintools.com/resources/user-guides/farsight-flexible-search-techn
 ```
  | dnsdb2.Client(apikey: str, server: str = 'https://api.dnsdb.info',
  |               swclient: str = 'dnsdb2-py', version: str = '0.0',
- |               proxies: Dict[str, str] = None, insecure: bool = False)
+ |               proxies: Dict[str, str] = None, insecure: bool = False,
+ |               verify: Union[str, bool, None] = None,
+ |               timeout: Union[float, tuple[float, float], None] = None)
  |      A client for DNSDB protocol version 2 with Flex Search.
  |
  |      Args:
@@ -107,6 +109,8 @@ https://www.domaintools.com/resources/user-guides/farsight-flexible-search-techn
  |          version (str): The version of the software reported to DNSDB.
  |          proxies (Dict[str, str]): HTTP proxies to use. Mapping of protocol to URL.
  |          insecure (bool): Skip https validation.
+ |          verify (str): Either a boolean controlling TLS certificate verification, or a path to a CA bundle.
+ |          timeout (float or tuple): Seconds to wait for server connect/initial read before raising an error. Use a (connect_timeout, read_timeout) tuple to set them independently. None means no timeout.
 ```
 
 <a name="dnsdb2.Client.ping"></a>
