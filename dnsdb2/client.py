@@ -284,8 +284,6 @@ Executes a {method} {key} flex search query.
 Args:
     value (str): A {method} to match against {key}.
 {_DOC_RRTYPE_ARG}
-    verbose (bool): Set to false to disable `count`, `time_first`, and
-        `time_last` fields in output.
 {_DOC_TIME_FENCE_ARGS}
     exclude (str): Exclude (i.e. filter-out) results that match the {method}.
 {_DOC_COMMON_ARGS}
