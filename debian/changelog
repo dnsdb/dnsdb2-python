@@ -1,3 +1,13 @@
+dnsdb2-python (1.2.1-1) debian-fsi; urgency=medium
+
+  * Preserve the HTTP response body in QueryError when the server returns an
+    error status not already mapped to a specific exception (e.g. 400, 404,
+    500), instead of discarding it as an empty exception message.
+  * Preserve the underlying error message when a connection-level failure
+    (timeout, DNS error, etc.) is converted to a QueryError.
+
+ -- DomainTools LLC <software@domaintools.com>  Fri, 23 Oct 2026 00:00:00 -0500
+
 dnsdb2-python (1.2.0-1) debian-fsi; urgency=medium
 
   * Add a timeout parameter, raise a dnsdb.QueryError if exceeded.
