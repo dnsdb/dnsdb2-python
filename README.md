@@ -818,15 +818,13 @@ https://www.domaintools.com/resources/user-guides/farsight-flexible-search-techn
 #### flex\_rrnames\_regex
 
 ```
- |  flex_rrnames_regex = f(self, value: str, rrtype: str = None, verbose: bool = True, ignore_limited: bool = False, **params)
+ |  flex_rrnames_regex = f(self, value: str, rrtype: str = None, ignore_limited: bool = False, **params)
  |      Executes a regex rrnames flex search query.
  |      
  |      Args:
  |          value (str): A regex to match against rrnames.
  |          rrtype (str): a DNS RRtype mnemonic.
  |      
- |          verbose (bool): Set to false to disable `count`, `time_first`, and
- |              `time_last` fields in output.
  |          time_first_before (int): provide results before the defined timestamp for
  |              when the DNS record was first observed. For example, the URL parameter
  |              “time_first_before=1420070400” will only provide matching DNS records
@@ -885,15 +883,13 @@ https://www.domaintools.com/resources/user-guides/farsight-flexible-search-techn
 #### flex\_rrnames\_glob
 
 ```
- |  flex_rrnames_glob = f(self, value: str, rrtype: str = None, verbose: bool = True, ignore_limited: bool = False, **params)
+ |  flex_rrnames_glob = f(self, value: str, rrtype: str = None, ignore_limited: bool = False, **params)
  |      Executes a glob rrnames flex search query.
  |      
  |      Args:
  |          value (str): A glob to match against rrnames.
  |          rrtype (str): a DNS RRtype mnemonic.
  |      
- |          verbose (bool): Set to false to disable `count`, `time_first`, and
- |              `time_last` fields in output.
  |          time_first_before (int): provide results before the defined timestamp for
  |              when the DNS record was first observed. For example, the URL parameter
  |              “time_first_before=1420070400” will only provide matching DNS records
@@ -952,15 +948,13 @@ https://www.domaintools.com/resources/user-guides/farsight-flexible-search-techn
 #### flex\_rdata\_regex
 
 ```
- |  flex_rdata_regex = f(self, value: str, rrtype: str = None, verbose: bool = True, ignore_limited: bool = False, **params)
+ |  flex_rdata_regex = f(self, value: str, rrtype: str = None, ignore_limited: bool = False, **params)
  |      Executes a regex rdata flex search query.
  |      
  |      Args:
  |          value (str): A regex to match against rdata.
  |          rrtype (str): a DNS RRtype mnemonic.
  |      
- |          verbose (bool): Set to false to disable `count`, `time_first`, and
- |              `time_last` fields in output.
  |          time_first_before (int): provide results before the defined timestamp for
  |              when the DNS record was first observed. For example, the URL parameter
  |              “time_first_before=1420070400” will only provide matching DNS records
@@ -1019,15 +1013,13 @@ https://www.domaintools.com/resources/user-guides/farsight-flexible-search-techn
 #### flex\_rdata\_glob
 
 ```
-flex_rdata_glob = f(self, value: str, rrtype: str = None, verbose: bool = True, ignore_limited: bool = False, **params)
+flex_rdata_glob = f(self, value: str, rrtype: str = None, ignore_limited: bool = False, **params)
  |      Executes a glob rdata flex search query.
  |      
  |      Args:
  |          value (str): A glob to match against rdata.
  |          rrtype (str): a DNS RRtype mnemonic.
  |      
- |          verbose (bool): Set to false to disable `count`, `time_first`, and
- |              `time_last` fields in output.
  |          time_first_before (int): provide results before the defined timestamp for
  |              when the DNS record was first observed. For example, the URL parameter
  |              “time_first_before=1420070400” will only provide matching DNS records

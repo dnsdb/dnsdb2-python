@@ -284,8 +284,6 @@ Executes a {method} {key} flex search query.
 Args:
     value (str): A {method} to match against {key}.
 {_DOC_RRTYPE_ARG}
-    verbose (bool): Set to false to disable `count`, `time_first`, and
-        `time_last` fields in output.
 {_DOC_TIME_FENCE_ARGS}
     exclude (str): Exclude (i.e. filter-out) results that match the {method}.
 {_DOC_COMMON_ARGS}
@@ -403,7 +401,7 @@ class Client(object):
                 _raise_error(res)
                 return res.json()
         except requests.RequestException as e:
-            raise dnsdb2.QueryError from e
+            raise dnsdb2.QueryError(str(e)) from e
 
     def _saf_query(self, path: str, ignore_limited: bool = False, **params):
         url = f'{self.server}/{API_PREFIX}/{path}'
@@ -424,7 +422,7 @@ class Client(object):
 
             _raise_error(res)
         except requests.RequestException as e:
-            raise dnsdb2.QueryError from e
+            raise dnsdb2.QueryError(str(e)) from e
 
         return dnsdb2.saf.handle_saf(res, ignore_limited=ignore_limited)
 
@@ -437,4 +435,5 @@ def _raise_error(res: requests.Response) -> None:
     e = _STATUS_CODE_MAP.get(res.status_code)
     if e:
         raise e(res.text)
-    res.raise_for_status()
+    if not res.ok:
+        raise dnsdb2.QueryError(res.text or f'HTTP {res.status_code}')
