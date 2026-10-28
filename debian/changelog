@@ -1,3 +1,10 @@
+dnsdb2-python (1.2.1) debian-fsi; urgency=medium
+
+  * Fix dnsdb2 error messages lost when converted to exceptions.
+  * Migrate to native, other changes to support new build pipeline.
+
+ -- DomainTools LLC <software@domaintools.com>  Mon, 26 Oct 2026 16:45:44 -0500
+
 dnsdb2-python (1.2.0-1) debian-fsi; urgency=medium
 
   * Add a timeout parameter, raise a dnsdb.QueryError if exceeded.

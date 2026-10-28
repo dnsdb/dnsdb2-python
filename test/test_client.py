@@ -18,6 +18,7 @@ from typing import List
 import unittest
 from unittest.mock import MagicMock, patch
 
+import requests
 import requests_mock
 
 import dnsdb2
@@ -260,6 +261,7 @@ class TestDnsdbClient(unittest.TestCase):
 
     def test_query_403(self, m):
         path = 'test/path'
+        body = 'Error: access denied'
 
         m.get(
             '{server}/dnsdb/v2/{path}?swclient={swclient}&version={version}'.format(
@@ -269,13 +271,17 @@ class TestDnsdbClient(unittest.TestCase):
                 version=self.client.version,
             ),
             status_code=403,
+            text=body,
             request_headers=self.client._headers(),
         )
 
-        self.assertRaises(dnsdb2.AccessDenied, self.client._saf_query, path)
+        with self.assertRaises(dnsdb2.AccessDenied) as cm:
+            self.client._saf_query(path)
+        self.assertEqual(body, str(cm.exception))
 
     def test_query_404(self, m):
         path = 'file/not/found'
+        body = 'Error: rdata searches are not allowed for the specified RRType'
 
         m.get(
             '{server}/dnsdb/v2/{path}?swclient={swclient}&version={version}'.format(
@@ -285,10 +291,30 @@ class TestDnsdbClient(unittest.TestCase):
                 version=self.client.version,
             ),
             status_code=404,
+            text=body,
             request_headers=self.client._headers(),
         )
 
-        self.assertRaises(dnsdb2.QueryError, self.client._saf_query, path)
+        with self.assertRaises(dnsdb2.QueryError) as cm:
+            self.client._saf_query(path)
+        self.assertEqual(body, str(cm.exception))
+
+    def test_query_connection_error(self, m):
+        path = 'test/path'
+
+        m.get(
+            '{server}/dnsdb/v2/{path}?swclient={swclient}&version={version}'.format(
+                server=self.client.server,
+                path=path,
+                swclient=self.client.swclient,
+                version=self.client.version,
+            ),
+            exc=requests.ConnectionError('Connection refused'),
+        )
+
+        with self.assertRaises(dnsdb2.QueryError) as cm:
+            self.client._saf_query(path)
+        self.assertEqual('Connection refused', str(cm.exception))
 
     def test_timeout_default(self, _):
         self.assertIsNone(self.client.timeout)
